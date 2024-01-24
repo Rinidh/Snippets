@@ -1,0 +1,65 @@
+import {
+  AspectRatio,
+  Spinner,
+  Image,
+  Flex,
+  useColorModeValue,
+  Box,
+  Button,
+} from "@chakra-ui/react";
+import { useEffect, useRef, useState } from "react";
+
+const PageLoadSpinner = () => {
+  const [show, setShow] = useState(true);
+
+  const pageLoadRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!show) {
+      setTimeout(() => {
+        if (pageLoadRef.current) {
+          pageLoadRef.current.style.opacity = "0";
+          console.log("after 5s");
+        }
+      }, 5000);
+    } else {
+      if (pageLoadRef.current) pageLoadRef.current.style.opacity = "1";
+    }
+  }, [show]);
+
+  const removeFromDOM = () => {
+    if (pageLoadRef.current) pageLoadRef.current.style.display = "none";
+  };
+
+  return (
+    <Flex
+      ref={pageLoadRef}
+      position={"fixed"}
+      top={0}
+      bottom={0}
+      left={0}
+      right={0}
+      // opacity={show ? 1 : 0}
+      transition={"opacity 1s linear"}
+      onTransitionEnd={removeFromDOM}
+      bg={"gray"}
+      zIndex={100}
+      //use other libs eg emotion & react-transition-group to create a smooth transition when disappearing instead of complicated code in this component
+    >
+      <Flex
+        // bg={"gray"}
+        h={"100%"}
+        w={"100%"}
+        align={"center"}
+        justify={"center"}
+        direction={"column"}
+      >
+        <Box boxSize={"300px"} bg={"darkgray"} />
+
+        <Button onClick={() => setShow((show) => !show)}>Click</Button>
+      </Flex>
+    </Flex>
+  );
+};
+
+export default PageLoadSpinner;
